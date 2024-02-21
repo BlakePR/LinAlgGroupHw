@@ -1,12 +1,18 @@
 import numpy as np
-import scipy.sparse as sp
+import scipy.sparse as sps
 
 
-def generateA(n: int, gamma: float) -> sp.csr_matrix:
+def generateA(n: int, gamma: float) -> sps.csr_matrix:
     # n: points in the grid
     # gamma: parameter
-    # returns: a sparse matrix
-    pass
+    # returns: a sparse
+    diagonals = [[]]
+
+    A1 = sps.diags()
+    A2 = None
+
+    A = A1 + A2
+    return A
 
 
 def generateB(n: int) -> np.ndarray:
