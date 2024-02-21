@@ -9,8 +9,8 @@ def generateA(n: int, gamma: float) -> sp.csr_matrix:
     pass
 
 
-def generateB(n: int, gamma: float) -> np.ndarray:
+def generateB(n: int) -> np.ndarray:
     # n: points in the grid
     # gamma: parameter
     # returns: a nx1 np array
-    pass
+    return np.ones((n, 1)) * (1 / (n + 2))
