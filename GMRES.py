@@ -19,32 +19,32 @@ class gmres:
         self.M = M
         assert l <= A.shape[0]
 
-        r0 = b - A@x0
-        Beta = np.linalg.norm(r0)
-        v0 = r0 / Beta
         m = 2
         xm = x0
         while self.error_bound(A, xm, b) and m <= l:
+            r = b - A@x0
+            Beta = np.linalg.norm(r)
+            v0 = r / Beta
             W = np.zeros((n,m))
             V = np.zeros((n,m+1))
-            V[:,0] = v0
+            V[:,0] = v0.reshape(-1)
             H = np.zeros((m+1,m))
             for j in range(m):
-                W[:,j] = A@V[:j]
+                W[:,j] = A@V[:,j]
                 for i in range(j):
                     H[i,j] = self.dot(W[:,j],V[:,i])
-                    W[:,j] = H[i,j]@v[:,j]
+                    W[:,j] = H[i,j]*V[:,j]
                 H[j+1,j] = self.norm(W[:,j])
                 if H[j+1,j] == 0:
                     m = j
                     break
                 V[:,j+1] = W[:,j]/H[j+1,j]
-            e1 = np.zeros(m+1,1)
+            e1 = np.zeros((m+1,1))
             e1[0,0] = 1
-            ym = np.linalg.solve(H,Beta*e1)
+            ym = np.linalg.lstsq(H,Beta*e1)
             xm = x0 + V@ym
 
-            m *=2
+            m = m*2 if m*2 < l else l
         return xm
     
     def dot(self, A: np.ndarray, B: np.ndarray):
