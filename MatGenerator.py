@@ -28,5 +28,3 @@ def generateB(n: int) -> np.ndarray:
     # gamma: parameter
     # returns: a nx1 np array
     return np.ones((n, 1)) * (1 / (n + 1))
-
-print(generateA(4,1).todense())
