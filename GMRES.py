@@ -20,13 +20,3 @@ class gmres:
         # TODO: Implement GMRES
         # make a change
 
-
-# example numpy stuff, delete later
-b = np.array([1, 0])
-A = np.array([[1, 3], [2, 6]])
-matmul = A @ A
-mat_vec = A @ b
-print(mat_vec)
-# np often makes vectors (n,) instead of (n,1)
-# so reshape them like so
-b = b.reshape(2, 1)
