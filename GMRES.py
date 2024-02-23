@@ -19,16 +19,21 @@ class gmres:
         self.M = M
         assert l <= A.shape[0]
 
+        # l corresponds to the number of iterations
+        #start at 2, go up to l while error bound is not met
         m = 2
         xm = x0
         while self.error_bound(A, xm, b) and m <= l:
+            #lines one from the reading
             r = b - A@x0
             Beta = np.linalg.norm(r)
             v0 = r / Beta
+            #pregenerate empyt matrices for later use
             W = np.zeros((n,m))
-            V = np.zeros((n,m+1))
+            V = np.zeros((n,m))
             V[:,0] = v0.reshape(-1)
             H = np.zeros((m+1,m))
+            # the rest is pretty exactly the same as lines 2-10
             for j in range(m):
                 W[:,j] = A@V[:,j]
                 for i in range(j):
@@ -39,11 +44,14 @@ class gmres:
                     m = j
                     break
                 V[:,j+1] = W[:,j]/H[j+1,j]
+            # unlike reading, H is defined but have to build e1
             e1 = np.zeros((m+1,1))
             e1[0,0] = 1
-            ym = np.linalg.lstsq(H,Beta*e1)
-            xm = x0 + V@ym
+            #least squares solution
+            ym = np.linalg.lstsq(H,Beta*e1)[0]
+            xm = xm + V@ym
 
+            #iterate up the m for higher l value
             m = m*2 if m*2 < l else l
         return xm
     
