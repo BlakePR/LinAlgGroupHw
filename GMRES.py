@@ -29,7 +29,7 @@ class gmres:
         #lines one from the reading    
         
         while self.error_bound(A, xm, b) and m <= l:    
-            #pregenerate empyt matrices for later use
+            #pregenerate empty matrices for later use
             r = b - A@xm
             Beta = np.linalg.norm(r)
             v0 = r / Beta
@@ -61,7 +61,7 @@ class gmres:
 
             #iterate up the m for higher l value
             m = m*2 if m*2 < l or m==l else l
-        return xm
+        return xm, Beta
     
     def dot(self, A: np.ndarray, B: np.ndarray):
         # A: matrix
