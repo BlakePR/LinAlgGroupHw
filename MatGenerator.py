@@ -1,5 +1,6 @@
 import numpy as np
 import scipy.sparse as sps
+import scipy as sp
 
 
 def generateA(n: int, gamma: float) -> sps.csr_matrix:
@@ -20,6 +21,7 @@ def generateA(n: int, gamma: float) -> sps.csr_matrix:
     A2 = A2 * gamma
 
     A = A1 + A2
+
     return A
 
 
