@@ -1,0 +1,25 @@
+import MatGenerator as mg
+import numpy as np
+import scipy as sp
+from importlib import reload
+import warnings
+reload(mg)
+
+warnings.filterwarnings("ignore", category=sp.sparse.SparseEfficiencyWarning)
+
+n_values = [16, 32, 64, 128]
+
+#Condition numbers for matrix A for the FEM problem
+for n in n_values:
+    A = mg.generateA(n, 1.).toarray()
+    condition_num = np.linalg.cond(A)
+    print(f"FEM Condition number for n={n}: {condition_num}")
+print()
+#Condition numbers for matrix A tilda for the preconditioned problem
+for n in n_values:
+    A = mg.generateA(n,1.)
+    A1lu =sp.sparse.linalg.spilu(A)
+    A1i = A1lu.solve(np.eye(n))
+    ATilda = A1i@A
+    condition_num = np.linalg.cond(ATilda)
+    print(f"Preconditioned Condition number for n={n}: {condition_num}")
