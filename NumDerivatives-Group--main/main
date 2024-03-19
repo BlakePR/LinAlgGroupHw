@@ -1,0 +1,50 @@
+""" This is the main script for problem 1 for the "Numerical Derivatives" homework. In 
+this problem we use the centered two-point formula to solve for the derivative of 
+y(x) = sin(x). We will then plot the error over one period at 100 points and try to
+optimize our step size h to minimize the error. """
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+#Define functions
+def y(x):
+    return np.sin(x)
+
+def y_prime(x,h,y):
+    derivatives = []
+    for x_i in x:
+        y_prime_point = (y(x_i+h) - y(x_i-h)) / (2*h)
+        derivatives.append(y_prime_point)
+    return derivatives
+
+#Initialize everything
+x = np.linspace(-np.pi,np.pi,100,endpoint = True)
+h=7*10**-6 
+derivatives = []
+error = []
+
+#Calculate the optimal value of h
+epsilon = 2.22*10**-16
+xc = np.sqrt(abs(np.sin(x)/(np.gradient(np.gradient(np.sin(x),x),x))))
+h1 = np.sqrt(epsilon)*xc
+""" This value for h was calculated using the method in 5.7 of NR, however, through trial and error
+I have found that the value of h above gives a much lower error. You guys can look over this 
+calculation if you want. """
+
+#Implement the two-point formula
+derivatives = y_prime(x,h,y)
+
+#Calculate error
+for i in range(len(x)):
+    point_error = abs(derivatives[i] - np.cos(x[i]))
+    error.append(point_error)
+
+#Plot error
+plt.plot(x, error)
+plt.xticks(np.arange(-np.pi, np.pi+0.01, np.pi/2), 
+           [r'$-\pi$', r'$-\pi/2$', '0',
+             r'$\pi/2$', r'$\pi$'])
+plt.xlabel('x')
+plt.ylabel('Error')
+plt.title('Error in Numerical Derivation')
+plt.show()
